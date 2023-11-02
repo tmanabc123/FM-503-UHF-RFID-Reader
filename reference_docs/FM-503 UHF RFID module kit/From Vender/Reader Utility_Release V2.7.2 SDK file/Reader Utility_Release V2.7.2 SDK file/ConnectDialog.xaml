@@ -1,0 +1,68 @@
+﻿<Window x:Class="ReaderUtility.ConnectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="{x:Null}" WindowStartupLocation="CenterScreen" AllowsTransparency="True"
+        Title="Connect"  ResizeMode="NoResize" WindowStyle="None" mc:Ignorable="d" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        d:DesignHeight="256" d:DesignWidth="440" SizeToContent="WidthAndHeight" Topmost="False">
+    <Window.Resources>
+        <Image x:Key="IMG_Close" Source="res/close.png"/>
+        <Style x:Key="TextBlockStyle_min_c">
+            <Setter Property="TextBlock.FontSize" Value="12"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle_mid_c">
+            <Setter Property="TextBlock.FontSize" Value="14"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle_min_c">
+            <Setter Property="Button.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="Button.FontSize" Value="14"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="34" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="#D6E9F5" BorderThickness="1,1,1,0" Background="#1E658F" MouseLeftButtonDown="OnConnectBorderMouseLeftDown">
+            <Grid Margin="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock FontSize="16" FontWeight="Bold" FontFamily="Arial Unicode MS" Foreground="WhiteSmoke" >Reader Search</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="ConnectDialogClose" Content="{StaticResource IMG_Close}" Width="28" Height="28" Click="onConnectDialogCloseClick" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" BorderBrush="#D6E9F5" BorderThickness="1,0,1,0" Background="#FAFAFA">  
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Style="{StaticResource TextBlockStyle_mid_c}" Margin="10,20,10,0" x:Name="TBMSG1"></TextBlock>
+                <TextBlock Style="{StaticResource TextBlockStyle_mid_c}" Margin="10,5,10,0" x:Name="TBMSG2"></TextBlock>
+                <GroupBox Height="60" MinWidth="396" Margin="10" BorderBrush="LightSlateGray">
+                    <GroupBox.Header>
+                        <Label FontSize="12" FontFamily="Arial Unicode MS">Multi-Reader Select</Label>
+                    </GroupBox.Header>
+                    <ComboBox x:Name="ComboBoxReader" Height="24" Width="384" VerticalAlignment="Top" HorizontalAlignment="Left" DropDownOpened ="OnComboboxReaderDropDownOpened"></ComboBox>
+                </GroupBox>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" BorderBrush="#D6E9F5" BorderThickness="1,0,1,1" Background="#FAFAFA" Margin="0,-1,0,0">
+            <StackPanel DockPanel.Dock="Bottom">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource ButtonStyle_min_c}" Margin="4" Height="26" Grid.Column="1" x:Name="ButtonConnect" Click="OnButtonConnectClick">Connect</Button>
+                    <Button Style="{StaticResource ButtonStyle_min_c}" Margin="4" Height="26" Grid.Column="2" x:Name="ButtonEnter" Click="OnButtonEnterClick">Enter Reader</Button>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

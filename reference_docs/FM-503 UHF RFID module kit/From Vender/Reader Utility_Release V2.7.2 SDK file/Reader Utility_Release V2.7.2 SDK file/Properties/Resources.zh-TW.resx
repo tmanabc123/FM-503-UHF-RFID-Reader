@@ -1,0 +1,360 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Connect" xml:space="preserve">
+    <value>連線</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>斷開</value>
+  </data>
+  <data name="Group_EPC" xml:space="preserve">
+    <value>EPC/TID讀取</value>
+  </data>
+  <data name="Group_EPC_MultiRead" xml:space="preserve">
+    <value>多標籤</value>
+  </data>
+  <data name="Group_EPC_ReadEPC" xml:space="preserve">
+    <value>讀取EPC(Q)</value>
+  </data>
+  <data name="Group_EPC_ReadEPC_U" xml:space="preserve">
+    <value>讀取EPC(U)</value>
+  </data>
+  <data name="Group_EPC_ReadTID" xml:space="preserve">
+    <value>TID查詢</value>
+  </data>
+  <data name="Group_EPC_RepeartRead" xml:space="preserve">
+    <value>連續</value>
+  </data>
+  <data name="Group_EPC_RepeatInterval" xml:space="preserve">
+    <value>重複讀取間隔(ms)</value>
+  </data>
+  <data name="Group_Kill" xml:space="preserve">
+    <value>標籤銷毀</value>
+  </data>
+  <data name="Group_Kill_Kill" xml:space="preserve">
+    <value>銷毀</value>
+  </data>
+  <data name="Group_Kill_KillPwd" xml:space="preserve">
+    <value>銷毀密碼:</value>
+  </data>
+  <data name="Group_Lock" xml:space="preserve">
+    <value>標籤記憶體保護設定</value>
+  </data>
+  <data name="Group_Lock_Action" xml:space="preserve">
+    <value>操作選項</value>
+  </data>
+  <data name="Group_Lock_Action_Lock" xml:space="preserve">
+    <value>鎖定</value>
+  </data>
+  <data name="Group_Lock_Action_PermaLock" xml:space="preserve">
+    <value>永久鎖定</value>
+  </data>
+  <data name="Group_Lock_Action_unLock" xml:space="preserve">
+    <value>解鎖</value>
+  </data>
+  <data name="Group_Lock_Action_unPermaLock" xml:space="preserve">
+    <value>永久解鎖</value>
+  </data>
+  <data name="Group_Lock_Execute" xml:space="preserve">
+    <value>Lock操作</value>
+  </data>
+  <data name="Group_Lock_Field" xml:space="preserve">
+    <value>操作區域</value>
+  </data>
+  <data name="Group_Lock_Field_AccessPwd" xml:space="preserve">
+    <value>Access密碼</value>
+  </data>
+  <data name="Group_Lock_Field_EPC" xml:space="preserve">
+    <value>EPC區塊</value>
+  </data>
+  <data name="Group_Lock_Field_KillPwd" xml:space="preserve">
+    <value>Kill密碼</value>
+  </data>
+  <data name="Group_Lock_Field_TID" xml:space="preserve">
+    <value>TID區塊</value>
+  </data>
+  <data name="Group_Lock_Field_USER" xml:space="preserve">
+    <value>USER區塊</value>
+  </data>
+  <data name="Group_Msg" xml:space="preserve">
+    <value>訊息:</value>
+  </data>
+  <data name="Group_Msg_ID" xml:space="preserve">
+    <value>序號:</value>
+  </data>
+  <data name="Group_Msg_Status" xml:space="preserve">
+    <value>連線狀態:</value>
+  </data>
+  <data name="Group_Msg_Ver" xml:space="preserve">
+    <value>版本:</value>
+  </data>
+  <data name="Group_ReadWrite" xml:space="preserve">
+    <value>標籤讀寫操作</value>
+  </data>
+  <data name="Group_ReadWrite_AccessPassword" xml:space="preserve">
+    <value>Access密碼:</value>
+  </data>
+  <data name="Group_ReadWrite_Access_PreCommand" xml:space="preserve">
+    <value>將Access設為預處理指令</value>
+  </data>
+  <data name="Group_ReadWrite_Address" xml:space="preserve">
+    <value>位址:</value>
+  </data>
+  <data name="Group_ReadWrite_Bank" xml:space="preserve">
+    <value>記憶體區段:</value>
+  </data>
+  <data name="Group_ReadWrite_Data" xml:space="preserve">
+    <value>資料:</value>
+  </data>
+  <data name="Group_ReadWrite_Length" xml:space="preserve">
+    <value>長度(word):</value>
+  </data>
+  <data name="Group_ReadWrite_Read" xml:space="preserve">
+    <value>讀取標籤</value>
+  </data>
+  <data name="Group_ReadWrite_Write" xml:space="preserve">
+    <value>寫入標籤</value>
+  </data>
+  <data name="Group_Record" xml:space="preserve">
+    <value>標籤統計</value>
+  </data>
+  <data name="Group_Record_Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Group_Record_Count" xml:space="preserve">
+    <value>標籤個數 :</value>
+  </data>
+  <data name="Group_Record_Info" xml:space="preserve">
+    <value>通信訊息</value>
+  </data>
+  <data name="Group_Record_Log" xml:space="preserve">
+    <value>儲存內容</value>
+  </data>
+  <data name="Group_Record_RunCount" xml:space="preserve">
+    <value>執行次數:</value>
+  </data>
+  <data name="Group_Select" xml:space="preserve">
+    <value>預處理設定</value>
+  </data>
+  <data name="Group_Select_Address" xml:space="preserve">
+    <value>位址(bit):</value>
+  </data>
+  <data name="Group_Select_Bank" xml:space="preserve">
+    <value>記憶體區段:</value>
+  </data>
+  <data name="Group_Select_Data" xml:space="preserve">
+    <value>資料(hex):</value>
+  </data>
+  <data name="Group_Select_Length" xml:space="preserve">
+    <value>長度(bit):</value>
+  </data>
+  <data name="Group_Select_PreCommand" xml:space="preserve">
+    <value>將Select設為預處理指令</value>
+  </data>
+  <data name="Group_Setting" xml:space="preserve">
+    <value>Reader設定</value>
+  </data>
+  <data name="Group_Setting_Adjust" xml:space="preserve">
+    <value>調整</value>
+  </data>
+  <data name="Group_Setting_Adjust_Frequency" xml:space="preserve">
+    <value>調整頻率: +/-間隔 30.5Hz * n階</value>
+  </data>
+  <data name="Group_Setting_Area" xml:space="preserve">
+    <value>地區</value>
+  </data>
+  <data name="Group_Setting_Baseband" xml:space="preserve">
+    <value>基頻</value>
+  </data>
+  <data name="Group_Setting_Baseband_Mode" xml:space="preserve">
+    <value>基頻模式 :</value>
+  </data>
+  <data name="Group_Setting_Baseband_Mode_Carry" xml:space="preserve">
+    <value>Carry</value>
+  </data>
+  <data name="Group_Setting_Baseband_Mode_RX" xml:space="preserve">
+    <value>RX</value>
+  </data>
+  <data name="Group_Setting_Measure" xml:space="preserve">
+    <value>量測</value>
+  </data>
+  <data name="Group_Setting_Measure_Frequency" xml:space="preserve">
+    <value>量測頻率</value>
+  </data>
+  <data name="Group_Setting_Measure_Input" xml:space="preserve">
+    <value>輸入量測頻率(MHz):</value>
+  </data>
+  <data name="Group_Setting_Power" xml:space="preserve">
+    <value>功率</value>
+  </data>
+  <data name="Group_Setting_Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Group_Setting_Run" xml:space="preserve">
+    <value>執行</value>
+  </data>
+  <data name="Group_Setting_Set" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Group_Setting_TagTest" xml:space="preserve">
+    <value>標籤測試</value>
+  </data>
+  <data name="Group_Status" xml:space="preserve">
+    <value>目前狀態</value>
+  </data>
+  <data name="Group_Status_Area" xml:space="preserve">
+    <value>地區 :</value>
+  </data>
+  <data name="Group_Status_Frequency" xml:space="preserve">
+    <value>Reader頻率 :</value>
+  </data>
+  <data name="Group_Status_Offset" xml:space="preserve">
+    <value>頻率位移 :</value>
+  </data>
+  <data name="Group_Status_Power" xml:space="preserve">
+    <value>功率 :</value>
+  </data>
+  <data name="Group_Status_Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Lock_00Description" xml:space="preserve">
+    <value>可讀可寫</value>
+  </data>
+  <data name="Lock_00Description_" xml:space="preserve">
+    <value>可寫</value>
+  </data>
+  <data name="Lock_01Description" xml:space="preserve">
+    <value>永久可讀可寫</value>
+  </data>
+  <data name="Lock_01Description_" xml:space="preserve">
+    <value>永久可寫</value>
+  </data>
+  <data name="Lock_10Description" xml:space="preserve">
+    <value>需密碼可讀可寫</value>
+  </data>
+  <data name="Lock_10Description_" xml:space="preserve">
+    <value>需密碼可寫</value>
+  </data>
+  <data name="Lock_11Description" xml:space="preserve">
+    <value>永久需密碼可讀可寫</value>
+  </data>
+  <data name="Lock_11Description_" xml:space="preserve">
+    <value>永久需密碼可寫</value>
+  </data>
+</root>

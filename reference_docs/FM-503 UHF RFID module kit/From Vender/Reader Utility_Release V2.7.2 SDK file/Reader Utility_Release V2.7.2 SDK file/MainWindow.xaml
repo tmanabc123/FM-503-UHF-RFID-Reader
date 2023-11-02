@@ -1,0 +1,845 @@
+﻿<Window x:Class="ReaderUtility.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen" Title="Reader Utility" Height="664" Width="1100"  
+        ResizeMode="NoResize"  Icon="/ReaderUtility;component/res/reader.png" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <Image x:Key="IMG_Close" Source="res/close.png"/>
+        <Image x:Key="IMG_Next" Source="png/next_white.png"/>
+        <Image x:Key="IMG_Previous" Source="png/previous_white.png"/>
+        <Image x:Key="IMG_Help" Source="png/help.png"/>
+        <SolidColorBrush x:Key="Disabled" Color="Gray"/>
+        
+        <Style x:Key="FAVCheckBox" TargetType="{x:Type CheckBox}">
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Content" Value=""></Setter>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Grid>
+                            <Ellipse x:Name="outerEllipse" Width="20" Height="20" Margin="5">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush RadiusX="1" RadiusY="1" GradientOrigin="0.7,0.3">
+                                        <GradientStop Color="WhiteSmoke" Offset="0" />
+                                        <GradientStop Color="Red" Offset="0.25" />
+                                        <GradientStop Color="Crimson" Offset="1" />
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag" Value="False">
+                                    <Setter TargetName="outerEllipse" Property="Fill">
+                                        <Setter.Value>
+                                            <RadialGradientBrush RadiusX="1" RadiusY="1" GradientOrigin="0.7,0.3">
+                                                <GradientStop Color="WhiteSmoke" Offset="0" />
+                                                <GradientStop Color="Red" Offset="0.25" />
+                                                <GradientStop Color="Crimson" Offset="1" />
+                                            </RadialGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>                              
+                            </Trigger>
+                            <Trigger Property="Tag" Value="True">
+                                <Setter TargetName="outerEllipse" Property="Fill">
+                                    <Setter.Value>
+                                        <RadialGradientBrush RadiusX="1" RadiusY="1" GradientOrigin="0.7,0.3">
+                                            <GradientStop Color="WhiteSmoke" Offset="0" />
+                                            <GradientStop Color="Green" Offset="0.25" />
+                                            <GradientStop Color="DarkGreen" Offset="1" />
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TextBlockStyle_B">
+            <Setter Property="TextBlock.Foreground" Value="DarkSlateGray"></Setter>
+            <Setter Property="TextBlock.FontSize" Value="12"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Rounded MT"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="TextBlock.Margin" Value="0,6,0,6"></Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle">
+            <Setter Property="TextBlock.FontSize" Value="12"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Rounded MT"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="TextBlock.Margin" Value="0,6,0,6"></Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle_min">
+            <Setter Property="TextBlock.Foreground" Value="Gray"></Setter>
+            <Setter Property="TextBlock.FontSize" Value="12"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle_mid">
+            <Setter Property="TextBlock.Foreground" Value="Gray"></Setter>
+            <Setter Property="TextBlock.FontSize" Value="14"></Setter>
+            <Setter Property="TextBlock.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyleDefineMargin">
+            <Setter Property="Button.FontFamily" Value="Arial Rounded MT"></Setter>
+            <Setter Property="Button.FontSize" Value="16"></Setter>
+            <Setter Property="Button.Margin" Value="8,0,8,16"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle_MarginRight20">
+            <Setter Property="Button.FontFamily" Value="Arial Rounded MT"></Setter>
+            <Setter Property="Button.FontSize" Value="16"></Setter>
+            <Setter Property="Button.Margin" Value="8,8,20,8"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle_min">
+            <Setter Property="Button.FontFamily" Value="Arial Unicode MS"></Setter>
+            <Setter Property="Button.FontSize" Value="14"></Setter>
+        </Style>
+        <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+
+        <SolidColorBrush x:Key="TextBackColor" Color="#FFF"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#7788BB"/>
+        <SolidColorBrush x:Key="TextColor" Color="#444"/>
+        <!--Default styled textbox-->
+        <Style x:Key="textBoxDefaultStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="ForceCursor" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,0,3,0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid >
+                            <Border Background="{StaticResource TextBackColor}" BorderBrush="{StaticResource BorderColor}" x:Name="Bd" BorderThickness="1.2">
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Normal styled textbox-->
+        <Style x:Key="textBoxNormalStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="ForceCursor" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,0,3,0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid >
+                            <Border Background="{StaticResource TextBackColor}" BorderBrush="{StaticResource BorderColor}" x:Name="Bd" BorderThickness="1.2">
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                            </Border>
+                            <Image Name="OKImage" Width="24" Height="24" Margin="0,0,4,0" Source="png/ok.png" HorizontalAlignment="Right"></Image>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Error-style textbox-->
+        <Style x:Key="textBoxErrorStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="ForceCursor" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,0,3,0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid Name="test">
+                            <Border Background="{StaticResource TextBackColor}" BorderBrush="OrangeRed" x:Name="Bd" BorderThickness="1.2">
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                            </Border>
+                            <Image Name="ErrorImage" Width="24" Height="24" Margin="0,0,4,0" Source="png/error.png" HorizontalAlignment="Right"></Image>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Info-style textbox-->
+        <Style x:Key="textBoxFocusStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="ForceCursor" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="3,0,3,0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid >
+                            <Border Background="{StaticResource TextBackColor}" BorderBrush="OrangeRed" x:Name="Bd" BorderThickness="1.2">
+                                <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                            </Border>
+                            <!--
+                            <Image Name="InfoImage" Width="24" Height="24" Margin="0,0,4,0" Source="png/info.png" HorizontalAlignment="Right"></Image>
+                            -->
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel LastChildFill="True" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GridViewColumnHeader}}}">
+                <Path x:Name="arrowUp" StrokeThickness="1" Fill="Gray" Data="M 5,10 L 15,10 L 10,5 L 5,10" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Center" Margin="5,0,5,0" SnapsToDevicePixels="True"/>
+                <TextBlock Text="{Binding }" />
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HeaderTemplateArrowDown">
+            <DockPanel LastChildFill="True" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GridViewColumnHeader}}}">
+                <Path x:Name="arrowDown" StrokeThickness="1" Fill="Gray"  Data="M 5,5 L 10,10 L 15,5 L 5,5" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Center" Margin="5,0,5,0" SnapsToDevicePixels="True"/>
+                <TextBlock Text="{Binding }" />
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HeaderTemplate">
+            <TextBlock Text="{Binding}" MinWidth="50" />
+        </DataTemplate>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="34" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" x:Name="BorderTitle" BorderBrush="#D6E9F5" BorderThickness="1,1,1,0" Background="#1E658F" MouseLeftButtonDown="OnBorderTitleMouseLeftDown">
+            <Grid Margin="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"> 
+                    <TextBlock FontSize="18" FontWeight="Bold" FontFamily="Arial Unicode MS" Foreground="White" VerticalAlignment="Center">Reader Utility</TextBlock>
+                    <TextBlock FontSize="12" FontWeight="Bold" FontFamily="Arial Unicode MS" Foreground="WhiteSmoke" VerticalAlignment="Bottom" MouseRightButtonDown="OnMenuMouseRightButtonDown"  Margin="5,0,0,0" Text="v2.7.2">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="MenuBugReport" Header="Bug Report" Click="OnMenuBugRepoetClick"/>
+                                <MenuItem x:Name="MenuLockGroup" Click="OnMenuLockGroupClick"/>
+                                <MenuItem x:Name="MenuTagCount" Click="OnMenuTagCountClick"/>
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>    
+                    </TextBlock>
+                    <Button x:Name="PreviousButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="365,5,0,0" Width="28" Height="28" Content="{StaticResource IMG_Previous}" Click="OnPreviousButtonClick"></Button>
+                    <Button x:Name="NextButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="10,5,0,0" Width="28" Height="28" Content="{StaticResource IMG_Next}" Click="OnNextButtonClick"></Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ComboBox x:Name="ComboBoxCulture" Height="26"  Width="170" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14" BorderBrush="Transparent"
+						ItemsSource="{Binding SupportedCultures, Source={StaticResource CultureResourcesDS}}"
+						DisplayMemberPath="DisplayName" 
+                        SelectionChanged="OnComboBoxCultureSelectionChanged" />
+                    <Button x:Name="ButtonClose" Content="{StaticResource IMG_Close}" Width="28" Height="28" Click="OnButtonCloseClick" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+            <Border x:Name="Border02" BorderBrush="#D6E9F5"  BorderThickness="1,0,1,0" Background="#FFF0F0F0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width ="124"/>
+                        <ColumnDefinition Width ="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Vertical" Background="#FFEEEEEE" Margin="2">
+                        <GroupBox Height="571" Width="120" VerticalAlignment="Top" BorderBrush="LightSlateGray" Margin="0,12,0,0">              
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel x:Name="B02QSetting" Orientation="Horizontal" Margin="0,10,0,0">
+                                    <CheckBox x:Name="B02CheckQ" Margin="2,8,0,0" ></CheckBox>
+                                    <Label FontSize="14" FontFamily="Arial Unicode MS">Slot Q:</Label>
+                                    <ComboBox Width="45" HorizontalAlignment="Left" x:Name="B02ComboBoxQ" FontSize="14" FontFamily="Arial Unicode MS" Height="26" VerticalAlignment="Bottom" Margin="-5,0,-5,0">
+                                        <ComboBoxItem Content="1" Tag="1"></ComboBoxItem>
+                                        <ComboBoxItem Content="2" Tag="2"></ComboBoxItem>
+                                        <ComboBoxItem Content="3" Tag="3"></ComboBoxItem>
+                                        <ComboBoxItem Content="4" Tag="4"></ComboBoxItem>
+                                        <ComboBoxItem Content="5" Tag="5" IsSelected="True"></ComboBoxItem>
+                                        <ComboBoxItem Content="6" Tag="6"></ComboBoxItem>
+                                        <ComboBoxItem Content="7" Tag="7"></ComboBoxItem>
+                                        <ComboBoxItem Content="8" Tag="8"></ComboBoxItem>
+                                        <ComboBoxItem Content="9" Tag="9"></ComboBoxItem>
+                                        <ComboBoxItem Content="10" Tag="A"></ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                
+                                <CheckBox x:Name="B02Repeat" Margin="2,4,0,0" FontSize="14" FontFamily="Arial Unicode MS" Content="Continue"></CheckBox>
+                                <GroupBox Width="120" x:Name="B02GroupControl" VerticalAlignment="Top" BorderBrush="LightSlateGray" Margin="-14,0,-13,0">
+                                    <GroupBox.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox x:Name="B02CheckBoxRead" Margin="-1,8,0,0"></CheckBox>
+                                            <Label FontSize="14" FontFamily="Arial Unicode MS" Content="Read Control"></Label>
+                                        </StackPanel>
+                                    </GroupBox.Header>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Bank, Source={StaticResource Resources}}"></TextBlock>
+                                        <ComboBox Width="96" HorizontalAlignment="Left" x:Name="B02ComboBoxMemBankSetting" FontSize="14" FontFamily="Arial Unicode MS" DropDownClosed="OnB02ComboBoxMemBankSettingDownClosed" Height="26" VerticalAlignment="Bottom">
+                                            <ComboBoxItem Content="00: RESERVED" Tag="0"></ComboBoxItem>
+                                            <ComboBoxItem Content="01: EPC" Tag="1" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="02: TID" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="03: USER" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="--------" Tag="4"></ComboBoxItem>
+                                            <ComboBoxItem Content="00: RESERVED(KillPwd)" Tag="0"></ComboBoxItem>
+                                            <ComboBoxItem Content="00: RESERVED(AccessPwd)" Tag="0"></ComboBoxItem>
+                                        </ComboBox>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Address, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBox 
+                                            Width="94" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B02TextBoxSettingAddress" 
+                                            MaxLength="4"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxNormalStyle}" 
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">2</TextBox>
+                                        <TextBlock Grid.Row="0" Grid.Column="2" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Length, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBox 
+                                            Width="94" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B02TextBoxSettingLength"
+                                            MaxLength="2"
+                                            CharacterCasing="Upper"                                        
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"                                             
+                                            Style="{StaticResource textBoxNormalStyle}" 
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">6</TextBox>
+                                    </StackPanel>
+                                </GroupBox>
+                                <Button x:Name="B02ButtonReadUR" Margin="0,10,0,5" Height="28" Width="94" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB02ButtonReadURClick" Content="{Binding Group_EPC_Read_UR, Source={StaticResource Resources}}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Background="#FFEEEEEE" Margin="2">
+                        <GroupBox x:Name="B02GroupRecord" Height="340" Width="967" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="LightSlateGray" Margin="2,0,0,0">
+                            <GroupBox.Header>
+                                <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Record, Source={StaticResource Resources}}"></Label>
+                            </GroupBox.Header>
+                            <StackPanel Background="#FFEEEEEE" Orientation="Vertical">
+                                <Grid Height="310">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="280"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" x:Name="B02ListViewQU" Height="280" Width="955" FontSize="13" FontFamily="Consolas" GridViewColumnHeader.Click="OnB02ListViewQUHeaderClick">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="PC" HeaderTemplate="{StaticResource HeaderTemplate}" Width="50" x:Name="_B02PC" DisplayMemberBinding="{Binding _B02PC}">
+                                                    <!-- 
+                                                    <GridViewColumn.Header>
+                                                        <GridViewColumnHeader Content="PC" Padding="5,0,0,0" MinWidth="50" x:Name="_B02PC" />
+                                                    </GridViewColumn.Header>
+                                                    -->
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="EPC" HeaderTemplate="{StaticResource HeaderTemplate}" Width="380" x:Name="_B02EPC" DisplayMemberBinding="{Binding _B02EPC}">
+                                                    <!--
+                                                    <GridViewColumn.Header>
+                                                        <GridViewColumnHeader Content="EPC" Padding="5,0,0,0" MinWidth="380" x:Name="_B02EPC" />
+                                                    </GridViewColumn.Header>
+                                                    -->
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="CRC16" HeaderTemplate="{StaticResource HeaderTemplate}" Width="56" x:Name="_B02CRC16" DisplayMemberBinding="{Binding _B02CRC16}">
+                                                    <!--
+                                                    <GridViewColumn.Header>
+                                                        <GridViewColumnHeader Content="CRC16" Padding="5,0,0,0" MinWidth="56" x:Name="_B02CRC16" />
+                                                    </GridViewColumn.Header>
+                                                    -->
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Read Command" HeaderTemplate="{StaticResource HeaderTemplate}" Width="350" x:Name="_B02Read" DisplayMemberBinding="{Binding _B02Read}">
+                                                    <!--
+                                                    <GridViewColumn.Header>
+                                                        <GridViewColumnHeader Content="Read Command" Padding="5,0,0,0" MinWidth="350" x:Name="_B02Read" />
+                                                    </GridViewColumn.Header>
+                                                    -->
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Count" Width="50" DisplayMemberBinding="{Binding _B02Count}"/>
+                                                <GridViewColumn Header="Percentage" Width="70" DisplayMemberBinding="{Binding _B02Percentage}" />
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                    <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Width="65" HorizontalAlignment="Left" Text="{Binding Group_Record_Count, Source={StaticResource Resources}}" x:Name="B02TextBlockCountTitle"></TextBlock>
+                                    <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Width="100" Margin="70,2,2,2" HorizontalAlignment="Left" x:Name="B02TextBlockCount" >
+                                                <TextBlock.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Clear" Click="OnB02TextBlockCountClearClick"></MenuItem>
+                                                    </ContextMenu>
+                                                </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                    <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Width="65" Margin="170,2,2,2" HorizontalAlignment="Left" Text="{Binding Group_Record_RunCount, Source={StaticResource Resources}}" x:Name="B02TextBlockRunCountTitle"></TextBlock>
+                                    <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Width="100" Margin="240,2,2,2" HorizontalAlignment="Left" x:Name="B02TextBlockRunCount" ></TextBlock>
+                                    <Button Grid.Row="1" Margin="2,2,100,2" x:Name="B02ButtonSave" Width="84" Height="26" FontSize="14" FontFamily="Arial Unicode MS" HorizontalAlignment="Right" Click="OnB02ButtonSaveClick" Content="{Binding Group_Record_Log, Source={StaticResource Resources}}"></Button>
+                                    <Button Grid.Row="1" Margin="2,2,2,2" x:Name="B02ButtonClear" Width="84" Height="26" FontSize="14" FontFamily="Arial Unicode MS" HorizontalAlignment="Right" Click="OnB02ButtonClearClick" Content="{Binding Group_Record_Clear, Source={StaticResource Resources}}"></Button>
+                                </Grid>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox x:Name="B02GroupMsg" Height="244" Width="967" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="LightSlateGray" Margin="2,0,0,0">
+                            <GroupBox.Header>
+                                <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Record_Info, Source={StaticResource Resources}}"></Label>
+                            </GroupBox.Header>
+                            <ListBox  x:Name="B02ListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="955" Height="210" FontFamily="Consolas" SelectionMode="Extended">
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Delete" Click="OnB02ListBoxMenuItemDeleteRangeClick"/>
+                                        <MenuItem Header="Delete All" Click="OnB02ListBoxMenuItemDeleteAllClick"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border x:Name="Border01" BorderBrush="#D6E9F5"  BorderThickness="1,0,1,0" Background="#FFF0F0F0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="540"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Background="#FFEEEEEE">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="120"/>
+                                <RowDefinition Height="140"/>
+                                <RowDefinition Height="140"/>
+                                <RowDefinition Height="115"/>
+                                <RowDefinition Height="282"/>
+                            </Grid.RowDefinitions>
+                            <GroupBox Grid.Row="0" x:Name="B01GroupEPC" Height="118" Width="530" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,0,0" Grid.RowSpan="7" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_EPC, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical">
+                                    <StackPanel Background="#FFEEEEEE" Orientation="Horizontal">
+                                        <TextBlock Margin="445,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Group_EPC_MultiRead, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Margin="10,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Group_EPC_RepeartRead, Source={StaticResource Resources}}"></TextBlock>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,1" Height="28">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="370"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="40"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" x:Name="B01ButtonReadEPC" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonReadEPCClick" Content="{Binding Group_EPC_ReadEPC, Source={StaticResource Resources}}"></Button>
+                                        <Button Grid.Column="0" x:Name="B01ButtonReadEPC_U" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonReadEPCClick_U" Content="{Binding Group_EPC_ReadEPC_U, Source={StaticResource Resources}}"></Button>
+                                        <TextBox Grid.Column="1" x:Name="B01TextBoxEPC"  Width="365" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Left"></TextBox>
+                                        <CheckBox Grid.Column="2" x:Name="B01CheckBoxMulti" Width="15" VerticalAlignment="Center" Checked="OnB01CheckBoxMultiChecked" Unchecked ="OnB01CheckBoxMultiUnchecked"></CheckBox>
+                                        <CheckBox Grid.Column="3" x:Name="B01CheckBoxRepeat"  Width="15" VerticalAlignment="Center" Checked="OnB01CheckBoxRepeatChecked"></CheckBox>
+                                    </Grid>
+                                    <Grid Margin="0,1,0,1" Height="28">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="95*"></ColumnDefinition>
+                                            <ColumnDefinition Width="370"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" x:Name="B01ButtonTID" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonTIDClick" Content="{Binding Group_EPC_ReadTID, Source={StaticResource Resources}}"></Button>
+                                        <TextBox Grid.Column="1" x:Name="B01TextBoxTID" Width="365" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Left" TextChanged="OnB01TextBoxTIDTextChanged"></TextBox>
+                                        <CheckBox Grid.Column="3" x:Name="B01CheckBoxRepeatTID" Width="15" VerticalAlignment="Center" Checked="OnB01CheckBoxRepeatTIDChecked"></CheckBox>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Grid.Row="1" x:Name="B01GroupSelect" Height="140" Width="530" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,-5,0,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Select, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical" Margin="0,-6,0,0">
+                                    <CheckBox x:Name="B01CheckBoxSelectPreCommand" VerticalAlignment="Top" FontFamily="Arial Unicode MS" Checked="OnB01CheckBoxSelectPreCommandChecked" Content="{Binding Group_Select_PreCommand, Source={StaticResource Resources}}"></CheckBox>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="300"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Select_Bank, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="1" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Select_Address, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="2" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Select_Length, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="3" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Select_Data, Source={StaticResource Resources}}"></TextBlock>
+                                    </Grid>
+                                    <Grid Margin="0,0,0,2" Height="30">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="300"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="B01ComboBoxMemBankSelect" Margin="2,2,0,2" Width="86" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" DropDownClosed="OnB01ComboBoxMemBankSelectDownClosed" SelectionChanged="OnB01ComboBoxMemBankSelectChanged">
+                                            <ComboBoxItem Content="00: RESERVED" Tag="0"></ComboBoxItem>
+                                            <ComboBoxItem Content="01: EPC" Tag="1" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="02: TID" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="03: USER" Tag="3"></ComboBoxItem>
+                                        </ComboBox>
+                                        <TextBox 
+                                            Grid.Column="1" Margin="2" Width="66" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS"
+                                            x:Name="B01TextBoxBitAddress"
+                                            MaxLength="4"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"   
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation"></TextBox>
+                                        <TextBox 
+                                            Grid.Column="2" Margin="2" Width="66" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B01TextBoxBitLength"
+                                            MaxLength="2"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation"></TextBox>      
+                                        <TextBox 
+                                            Grid.Column="3" Margin="2" Width="286" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B01TextBoxBitData"
+                                            CharacterCasing="Upper" 
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">    
+                                        </TextBox>
+                                        <!--
+                                        <Button Grid.Column="3" x:Name="ButtonBitDataHelp" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="250,0,0,0" Width="24" Height="24" Content="{StaticResource IMG_Help}" Click="OnButtonBitDataHelpClick"></Button>
+                                        -->
+                                    </Grid>                        
+                                    <CheckBox Margin="2,0,0,0" x:Name="B01CheckBoxAccessPreCommand" VerticalAlignment="Top" FontFamily="Arial Unicode MS" Checked="OnB01CheckBoxAccessPreCommandChecked" Content="{Binding Group_ReadWrite_Access_PreCommand, Source={StaticResource Resources}}"></CheckBox>                          
+                                    <Grid Margin="0,0,0,2" Height="30">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="142"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Group_ReadWrite_AccessPassword, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBox Grid.Column="1"
+                                            Margin="2" Width="137" HorizontalAlignment="Left" FontSize="14" FontFamily="Consolas" 
+                                            x:Name="B01TextBoxAccessPassword"
+                                            MaxLength="8"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">
+                                        </TextBox>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Grid.Row="2" x:Name="B01GroupReadWrite" Height="140" Width="530" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,-8,0,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_ReadWrite, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical" Margin="0,-6,0,0">
+                                    <Grid Margin="0,0,0,2" Height="48">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition Width="145"></ColumnDefinition>
+                                            <ColumnDefinition Width="165" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="16"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Bank, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Address, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Row="0" Grid.Column="2" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_ReadWrite_Length, Source={StaticResource Resources}}"></TextBlock>
+                                        <ComboBox Grid.Row="1" Grid.Column="0" x:Name="B01ComboBoxMemBankSetting" Margin="2,0,0,2" Width="86" Height="26" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" DropDownClosed="OnB01ComboBoxMemBankSettingDownClosed" VerticalAlignment="Bottom">
+                                            <ComboBoxItem Content="00: RESERVED" Tag="0"></ComboBoxItem>
+                                            <ComboBoxItem Content="01: EPC" Tag="1" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="02: TID" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="03: USER" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="--------" Tag="4"></ComboBoxItem>
+                                            <ComboBoxItem Content="00: RESERVED(KillPwd)" Tag="0"></ComboBoxItem>
+                                            <ComboBoxItem Content="00: RESERVED(AccessPwd)" Tag="0"></ComboBoxItem>
+                                        </ComboBox>
+                                        <TextBox 
+                                            Grid.Row="1" Grid.Column="1" Margin="2,2,2,2" Width="66" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B01TextBoxSettingAddress" 
+                                            MaxLength="4"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxNormalStyle}" 
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">2</TextBox>
+                                        <TextBox 
+                                            Grid.Row="1" Grid.Column="2" Margin="2,2,2,2" Width="66" HorizontalAlignment="Left" FontSize="14" FontFamily="Arial Unicode MS" 
+                                            x:Name="B01TextBoxSettingLength"
+                                            MaxLength="2"
+                                            CharacterCasing="Upper"                                        
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"                                             
+                                            Style="{StaticResource textBoxNormalStyle}" 
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation">6</TextBox>
+                                    </Grid>
+                                    <Grid Height="32">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="430"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <Button Grid.Row="1" Grid.Column="0" x:Name="B01ButtonWrite" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonWriteClick" Content="{Binding Group_ReadWrite_Write, Source={StaticResource Resources}}"></Button>
+                                        <TextBox 
+                                            Grid.Row="1" Grid.Column="1" Width="425" HorizontalAlignment="Left" FontSize="14" FontFamily="Consolas" 
+                                            x:Name="B01TextBoxWrite"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"  
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation"></TextBox>
+                                    </Grid>
+                                    <Grid Height="30">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="430"></ColumnDefinition>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <Button Grid.Column="0" x:Name="B01ButtonRead" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonReadClick" Content="{Binding Group_ReadWrite_Read, Source={StaticResource Resources}}"></Button>
+                                        <TextBox 
+                                            Grid.Column="1" Width="425" HorizontalAlignment="Left" FontSize="14" FontFamily="Consolas"
+                                            x:Name="B01TextBoxRead" 
+                                            Style="{StaticResource textBoxDefaultStyle}">
+                                        </TextBox>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Grid.Row="3" x:Name="B01GroupLock" Height="115" Width="530" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,-8,0,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Lock, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical">
+                                    <Grid Margin="2,2,2,5" x:Name="B01GridLockMemoryBlock">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="102"></ColumnDefinition>
+                                            <ColumnDefinition Width="102"></ColumnDefinition>
+                                            <ColumnDefinition Width="102"></ColumnDefinition>
+                                            <ColumnDefinition Width="102"></ColumnDefinition>
+                                            <ColumnDefinition Width="102"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="16"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Column="0" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Lock_Field_KillPwd, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="1" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Lock_Field_AccessPwd, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="2" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Lock_Field_EPC, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="3" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Lock_Field_TID, Source={StaticResource Resources}}"></TextBlock>
+                                        <TextBlock Grid.Column="4" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Lock_Field_USER, Source={StaticResource Resources}}"></TextBlock>
+
+                                        <ComboBox Grid.Row="1" Grid.Column="0" Width="100" FontFamily="Arial Unicode MS" VerticalAlignment="Center" x:Name="B01ComboBoxLockKillPwd" FontSize="14" >
+                                            <ComboBoxItem Content="   -- skip --" Tag="0" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_00Description, Source={StaticResource Resources}}" Tag="1" ></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_01Description, Source={StaticResource Resources}}" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_10Description, Source={StaticResource Resources}}" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_11Description, Source={StaticResource Resources}}" Tag="4"></ComboBoxItem>
+                                        </ComboBox>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" Width="100" FontFamily="Arial Unicode MS" VerticalAlignment="Center" x:Name="B01ComboBoxLockAccessPwd" FontSize="14" >
+                                            <ComboBoxItem Content="   -- skip --" Tag="0" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_00Description, Source={StaticResource Resources}}" Tag="1" ></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_01Description, Source={StaticResource Resources}}" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_10Description, Source={StaticResource Resources}}" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_11Description, Source={StaticResource Resources}}" Tag="4"></ComboBoxItem>
+                                        </ComboBox>
+                                        <ComboBox Grid.Row="1" Grid.Column="2" Width="100" FontFamily="Arial Unicode MS" VerticalAlignment="Center" x:Name="B01ComboBoxLockEPC" FontSize="14" >
+                                            <ComboBoxItem Content="   -- skip --" Tag="0" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_00Description_, Source={StaticResource Resources}}" Tag="1" ></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_01Description_, Source={StaticResource Resources}}" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_10Description_, Source={StaticResource Resources}}" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_11Description_, Source={StaticResource Resources}}" Tag="4"></ComboBoxItem>
+                                        </ComboBox>
+                                        <ComboBox Grid.Row="1" Grid.Column="3" Width="100" FontFamily="Arial Unicode MS" VerticalAlignment="Center" x:Name="B01ComboBoxLockTID" FontSize="14">
+                                            <ComboBoxItem Content="   -- skip --" Tag="0" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_00Description_, Source={StaticResource Resources}}" Tag="1" ></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_01Description_, Source={StaticResource Resources}}" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_10Description_, Source={StaticResource Resources}}" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_11Description_, Source={StaticResource Resources}}" Tag="4"></ComboBoxItem>
+                                        </ComboBox>
+                                        <ComboBox Grid.Row="1" Grid.Column="4" Width="100" FontFamily="Arial Unicode MS" VerticalAlignment="Center" x:Name="B01ComboBoxLockUser" FontSize="14" >
+                                            <ComboBoxItem Content="   -- skip --" Tag="0" IsSelected="True"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_00Description_, Source={StaticResource Resources}}" Tag="1" ></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_01Description_, Source={StaticResource Resources}}" Tag="2"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_10Description_, Source={StaticResource Resources}}" Tag="3"></ComboBoxItem>
+                                            <ComboBoxItem Content="{Binding Lock_11Description_, Source={StaticResource Resources}}" Tag="4"></ComboBoxItem>
+                                        </ComboBox>
+                                    </Grid>
+                                    <StackPanel Background="#FFEEEEEE" Orientation="Vertical" Margin="0,-6,0,0">
+                                        <Grid Height="30">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="102"></ColumnDefinition>
+                                                <ColumnDefinition Width="104"></ColumnDefinition>
+                                                <ColumnDefinition Width="104"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Button x:Name="B01ButtonLock" Margin="2,0,2,0" Height="28" Width="84" FontSize="14" HorizontalAlignment="Left" FontFamily="Arial Unicode MS" 
+                                                Click="OnB01ButtonLockClick" 
+                                                Content="{Binding Group_Lock_Execute, Source={StaticResource Resources}}"></Button>
+                                            <TextBox Grid.Column="1" Margin="2" x:Name="B01TextBoxMask" Width="100" FontFamily="Arial Unicode MS"
+                                                CharacterCasing="Upper"
+                                                MaxLength="3"
+                                                PreviewKeyUp="TextBox_PreviewKeyUp"                                                        
+                                                Style="{StaticResource textBoxDefaultStyle}"
+                                                LostFocus="TextBoxLostFocusValidation"
+                                                GotFocus="TextBoxGotFocusValidation"
+                                                HorizontalAlignment="Left"></TextBox>
+                                            <TextBox Grid.Column="2" Margin="2" x:Name="B01TextBoxAction" Width="100" FontFamily="Arial Unicode MS"
+                                                CharacterCasing="Upper"
+                                                MaxLength="3"
+                                                PreviewKeyUp="TextBox_PreviewKeyUp"
+                                                Style="{StaticResource textBoxDefaultStyle}"
+                                                LostFocus="TextBoxLostFocusValidation"
+                                                GotFocus="TextBoxGotFocusValidation"
+                                                HorizontalAlignment="Left"></TextBox>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Grid.Row="4" x:Name="B01GroupKill" Height="75" Width="260" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,-5,0,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Kill, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical" Margin="0,-5,0,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                            <ColumnDefinition Width="110"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="15"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Column="1" Margin="2,0,0,0" FontSize="12" FontFamily="Arial Unicode MS" VerticalAlignment="Center" Text="{Binding Group_Kill_KillPwd, Source={StaticResource Resources}}"></TextBlock>
+                                        <Button Grid.Row="1" Grid.Column="0" x:Name="B01ButtonKill" Width="84" FontSize="14" FontFamily="Arial Unicode MS" Click="OnB01ButtonKillClick" Content="{Binding Group_Kill_Kill, Source={StaticResource Resources}}"></Button>
+                                        <TextBox 
+                                            Grid.Row="1" Grid.Column="1" Margin="2,2,0,2" x:Name="B01TextBoxKillPassword" Width="140" FontSize="14" FontFamily="Consolas" HorizontalAlignment="Left" MaxLength="8"
+                                            CharacterCasing="Upper"
+                                            PreviewKeyUp="TextBox_PreviewKeyUp"
+                                            Style="{StaticResource textBoxDefaultStyle}"
+                                            LostFocus="TextBoxLostFocusValidation"
+                                            GotFocus="TextBoxGotFocusValidation"></TextBox>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Grid.Row="4" x:Name="B01GroupSetting" Height="75" Width="260" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="276,-5,0,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Setting, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical" Margin="5,11,5,0">
+                                    <Button x:Name="B01ButtonSetting" Width="84" Height="30" FontSize="14" FontFamily="Arial Unicode MS" HorizontalAlignment="Left" Click="OnB01ButtonSettingClick" Content="{Binding Group_Setting_Set, Source={StaticResource Resources}}"></Button>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Background="#FFEEEEEE">
+                        <Grid Height="604">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="240"/>
+                                <RowDefinition Height="344"/>
+                            </Grid.RowDefinitions>
+                                <GroupBox Grid.Row="0" x:Name="B01GroupRecord" Height="240" Width="545" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,5,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Record, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <StackPanel Background="#FFEEEEEE" Orientation="Vertical">
+                                    <Grid Height="210">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="180"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <ListView Grid.Row="0" x:Name="B01ListViewQU" Height="180" Width="532" FontSize="13" FontFamily="Consolas">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="PC" Width="50" DisplayMemberBinding="{Binding _PC}"/>
+                                                    <GridViewColumn Header="EPC" Width="320" DisplayMemberBinding="{Binding _EPC}" />
+                                                    <GridViewColumn Header="CRC16" Width="50" DisplayMemberBinding="{Binding _CRC16}" />
+                                                    <GridViewColumn Header="Count" Width="50" DisplayMemberBinding="{Binding _Count}" />
+                                                    <GridViewColumn Header="Percentage" Width="60" DisplayMemberBinding="{Binding _Percentage}" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <TextBlock Grid.Row="1" x:Name="B01TextBlockCountTitle" Style="{StaticResource TextBlockStyle}" Width="65" HorizontalAlignment="Left" Text="{Binding Group_Record_Count, Source={StaticResource Resources}}" ></TextBlock>
+                                        <TextBlock Grid.Row="1" x:Name="B01TextBlockCount" Style="{StaticResource TextBlockStyle}" Width="100" Margin="70,2,2,2" HorizontalAlignment="Left"></TextBlock>
+                                        <Button Grid.Row="1" Margin="2,2,100,2" x:Name="B01ButtonSave" Width="84" Height="26" FontSize="14" FontFamily="Arial Unicode MS" HorizontalAlignment="Right" Click="OnB01ButtonSaveClick" Content="{Binding Group_Record_Log, Source={StaticResource Resources}}"></Button>
+                                        <Button Grid.Row="1" Margin="2,2,2,2" x:Name="B01ButtonClear" Width="84" Height="26" FontSize="14" FontFamily="Arial Unicode MS" HorizontalAlignment="Right" Click="OnB01ButtonClearClick" Content="{Binding Group_Record_Clear, Source={StaticResource Resources}}"></Button>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                                <GroupBox Grid.Row="1" x:Name="B01GroupMsg" Height="344" Width="545" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,5,0" BorderBrush="LightSlateGray">
+                                <GroupBox.Header>
+                                    <Label FontSize="12" FontFamily="Arial Unicode MS" Content="{Binding Group_Record_Info, Source={StaticResource Resources}}"></Label>
+                                </GroupBox.Header>
+                                <ListBox  x:Name="mListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="532" Height="304" FontFamily="Consolas" SelectionMode="Extended">
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Delete" Click="OnB01ListBoxMenuItemDeleteRangeClick"/>
+                                            <MenuItem Header="Delete All" Click="OnB01ListBoxMenuItemDeleteAllClick"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                            </GroupBox>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <Border Grid.Row="2" BorderBrush="#D6E9F5" BorderThickness="1,0,1,1" Background="Gainsboro">
+            <StackPanel DockPanel.Dock="Bottom" Background="Gainsboro" Margin="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="530"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="75"/>
+                        <ColumnDefinition Width="55"/>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Style="{StaticResource TextBlockStyle}" Margin="10,0,0,0" Text="{Binding Group_Msg, Source={StaticResource Resources}}"></TextBlock>
+                    <TextBlock Grid.Column="1" Style="{StaticResource TextBlockStyle_B}" x:Name="LabelMessage" Width="530" TextWrapping="Wrap" TextAlignment="Left" TextTrimming="CharacterEllipsis"></TextBlock>
+                    <TextBlock Grid.Column="2" Style="{StaticResource TextBlockStyle}" Text="{Binding Group_Msg_Ver, Source={StaticResource Resources}}"></TextBlock>
+                    <TextBlock Grid.Column="3" Style="{StaticResource TextBlockStyle_B}" x:Name="FirmwareVersion" Width="140"></TextBlock>
+                    <TextBlock Grid.Column="4" Style="{StaticResource TextBlockStyle}" Text="{Binding Group_Msg_ID, Source={StaticResource Resources}}"></TextBlock>
+                    <TextBlock Grid.Column="5" Style="{StaticResource TextBlockStyle_B}" x:Name="TBReaderID" Width="75"></TextBlock>
+                    <TextBlock Grid.Column="6" Style="{StaticResource TextBlockStyle}" Text="{Binding Group_Msg_Status, Source={StaticResource Resources}}"></TextBlock>
+                    <TextBlock Grid.Column="7" Style="{StaticResource TextBlockStyle_B}" x:Name="TextBlockStatus" Width="160" Margin="0,7" HorizontalAlignment="Left"></TextBlock>
+                    <CheckBox Grid.Column="8" x:Name="CheckBoxStatus" Style="{StaticResource FAVCheckBox}" IsEnabled="True" >
+                        <CheckBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{Binding Disconnect, Source={StaticResource Resources}}" Click="OnCloseConnectClick"/>
+                                <Separator/>
+                                <MenuItem Header="{Binding Connect, Source={StaticResource Resources}}" Click="OnOpenConnectClick"/>
+                            </ContextMenu>
+                        </CheckBox.ContextMenu>
+                    </CheckBox>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

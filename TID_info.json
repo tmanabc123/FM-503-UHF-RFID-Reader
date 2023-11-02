@@ -1,0 +1,32 @@
+{
+    "associations":
+    {   
+        "standard":{
+            "11100010":"True",
+            "11101101":"Nonexistent"
+        },
+        "XTIDBit":{
+            "1":"True",
+            "0":"False"
+        },
+        "SecurityBit":{
+            "1":"True",
+            "0":"False"
+        },
+        "FileOpenBit":{
+            "1":"True",
+            "0":"False"
+        },
+        "SN38":{
+            "123905":"Team Blue",
+            "1252321":"Box of Apples"
+        }
+    },
+    "known_tags":{
+        "Impinj":{
+            "Models":[
+                "Monza R6"
+            ]
+        }
+    }
+}

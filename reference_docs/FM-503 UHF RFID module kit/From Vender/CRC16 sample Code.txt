@@ -1,0 +1,93 @@
+//For Gen2 Tag CRC-16
+//Polynomial: x^16 + x^12 + x^5 + 1 (0x1021)<br>
+//Initial value: 0xFFFF
+//Residue: 0x1D0F
+
+
+/************************************************************************/
+/* for MCU                                                              */
+/************************************************************************/
+uint16_t crc16(uint8_t *add, uint16_t length16){
+	uint16_t crc;
+	uint16_t i;
+	crc = 0xFFFF;
+	for(i=0; i<length16; i++) {
+		if((i%8) == 0)		crc ^= ((uint16_t)(*add++) << 8);
+		if(crc & 0x8000)	crc = (crc<<1) ^ 0x1021;
+		else				crc <<= 1;
+	}
+	return crc;
+}
+
+
+////Verify CRC-16 example
+//int verify_crc16(uint8_t *pcEpcCrc, uint16_t bitLength)
+//{
+//	uint16_t crc;
+//
+//	crc = crc16(pcEpcCrc,bitLength);
+//	if(crc == 0x1D0F)
+//		return SUCCESS;
+//	else
+//		return -1;
+//}
+
+
+
+
+/************************************************************************/
+/* for C++  MFC                                                         */
+/************************************************************************/
+UINT CRC16(CByteArray &_data)
+{
+	UINT crc16 = 0xFFFF;
+	UINT x = 0, y = 0;
+	if (_data.IsEmpty()) return 0;
+	if (_data[0] == 0) 
+	{
+		x = 8; y = 1;
+	}
+	for (int i = x, j = y; i < _data.GetSize() * 8; i++) 
+	{
+		if ((i % 8) == 0) 
+			crc16 ^= (_data[j++] << 8) & 0xFF00;
+		if ((crc16 & 0x8000) != 0) 
+			crc16 = (((crc16 << 1) & 0xFFFE) ^ 0x1021);
+		else 
+		{
+			crc16 <<= 1;
+			crc16 &= 0xFFFE;
+		}
+	}
+	crc16 &= 0xFFFF;
+	return crc16;
+}
+
+
+/************************************************************************/
+/* for C#                                                               */
+/************************************************************************/
+static int CRC16(byte[] pBytes)
+{
+	int crc16 = 0xFFFF;
+	int x = 0, y = 0;
+	if (pBytes == null) return 0;
+	if (pBytes[0] == 0)
+	{
+		x = 8; y = 1;
+	}
+	for (int i = x, j = y; i < pBytes.Length * 8; i++)
+	{
+		if ((i % 8) == 0) crc16 ^= (pBytes[j++] << 8) & 0xFF00;
+		if ((crc16 & 0x8000) != 0) crc16 = (((crc16 << 1) & 0xFFFE) ^ 0x1021);
+		else
+		{
+			crc16 <<= 1;
+			crc16 &= 0xFFFE;
+		}
+	}
+	crc16 &= 0xFFFF;
+	return crc16;
+}
+
+
