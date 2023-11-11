@@ -18,7 +18,7 @@ The FM-503 module is an affordable (Less than $100) UHF RFID reader that is able
 
 # Functions
 So far, the following functions have been implemented:
-1. Get reader DI
+1. Get reader ID
 2. Get reader version number
 3. Read the 69 bit TID bank
 4. Decode TID bank based on the EPS Gen2 standard
