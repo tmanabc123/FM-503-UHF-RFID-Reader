@@ -11,3 +11,4 @@ So far, the following functions have been implemented:
 3. Read the 69 bit TID bank
 4. Decode TID bank based on the EPS Gen2 standard
 5. Decode manufacturer ID and tag model number based on database provided by GS1
+6. Display that data in a gui
