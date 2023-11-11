@@ -8,7 +8,7 @@ This repo contains the python required to interface to the FM-503. This includes
 - PySerial
 
 ## Launching the software
-just cd into the FM-503-UHF-RFID-Reader repo file and run gui.py using python3
+just cd into the "FM-503-UHF-RFID-Reader" file after cloing the repo and run gui.py using python3
 ```console
 $ python3 gui.py
 ```
