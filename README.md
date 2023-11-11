@@ -3,6 +3,16 @@ This repo contains the python required to interface to the FM-503. This includes
 
 <img src="img/gui.png" alt="gui" width="65%"/>
 
+## Dependencies
+- PyQT6
+- PySerial
+
+## Launching the software
+just cd into the FM-503-UHF-RFID-Reader repo file and run gui.py using python3
+```console
+$ python3 gui.py
+```
+
 # The Hardware
 The FM-503 module is an affordable (Less than $100) UHF RFID reader that is able to read ISO18000-6C / EPC GEN2 Tags. These readers come in may different form factors and can all be purchased on ali express. This software was develpoed to interface to [this development board](https://www.aliexpress.us/item/3256803639172556.html) but any FM-503 based board would work.
 
