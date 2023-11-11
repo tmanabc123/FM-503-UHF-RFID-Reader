@@ -103,7 +103,12 @@ def interpret_lower_48_TID(lower_48:list) -> str:
     # Get mask designer ID from json file
     designer, mdid_index = mdid_lookup(lower_48[4])
     # get tag model name
-    model_name = model_lookup(mdid_index, lower_48[5])[0]
+    try:
+        model_name = model_lookup(mdid_index, lower_48[5])[0]
+    except:
+        # if no model name exists in the database
+        model_name = "Unknown: {}".format(lower_48[5])
+
     # EPC XTID header - do nothing for now
     binary_XTID = lower_48[6]
 
