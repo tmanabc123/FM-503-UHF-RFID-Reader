@@ -66,7 +66,7 @@ class Main(QWidget):
         # Initialize timer
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_loop)
-        self.update_rate = 200
+        self.update_rate = 20
 
 
 
@@ -96,15 +96,36 @@ class Main(QWidget):
         self.start_logging_button.clicked.connect(self.start_log)
         self.layout.addWidget(self.start_logging_button,row,2)
 
+
+        ######################################### Second Row ############################
+        row += 1
+        # mode select between TID, EPC single, EPC multi, and multi segment
+
+        # open log file to read
+
+
+
         ######################################### Data Display block ############################
         # ############## section label ##############
         row += 1
         section_one_label = QLabel(self)
         section_one_label.setMaximumHeight(30)
         section_one_label.setText("Unique Tags")
-        section_one_label.setFont(QtGui.QFont('Arial', 20)) 
-        section_one_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.layout.addWidget(section_one_label, row,0, 1,width)
+        section_one_label.setFont(QtGui.QFont('Arial', 20))
+        self.layout.addWidget(section_one_label, row,0)
+
+        # ############## export log button ##############
+        self.export_log_button = QPushButton(self, text='Export Log')
+        self.export_log_button.setStyleSheet(blue_button_style_shet)
+        self.export_log_button.clicked.connect(self.export_log)
+        self.layout.addWidget(self.export_log_button,row,1)
+
+        # ############## reset log button ##############
+        self.reset_log_button = QPushButton(self, text='Clear Log')
+        self.reset_log_button.setStyleSheet(red_button_style_shet)
+        self.reset_log_button.clicked.connect(self.clear_log)
+        self.layout.addWidget(self.reset_log_button,row,2)
+
 
         # ############## data table ##############
         row += 1
@@ -210,6 +231,19 @@ class Main(QWidget):
         self.ser.close()
         print("serial interface closed")
 
+    def clear_log(self):
+        """
+        clear the log
+        """
+        self.tag_database = {}
+        self.update_data_table()
+
+    def export_log(self):
+        """
+        Save log to file
+        """
+        print("Saving Log to file")
+
 
     def update_data_table(self):
         """
@@ -285,6 +319,9 @@ class Main(QWidget):
 
             # fit coumns to data
             self.data_table.resizeColumnsToContents()
+        else:
+            # display empty table
+            self.data_table.setRowCount(0)
 
 
     def refresh_serial_devices(self):

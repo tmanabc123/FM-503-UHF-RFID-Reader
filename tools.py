@@ -8,6 +8,7 @@
 import time
 import json
 from knownTags import *
+from crc import Calculator, Configuration
 
 
 # open json file containing mask designer ID and tag model number info
@@ -178,3 +179,77 @@ red_button_style_shet = """QPushButton{
 QPushButton:hover{
     background-color: #a44a4a;
 }"""
+
+blue_button_style_shet = """QPushButton{
+    background-color: #234cc4;
+    border-radius:4px;
+    padding:4px;
+}
+
+QPushButton:hover{
+    background-color: #4565c4;
+}"""
+
+def flip_hex(input:str) -> str:
+    """
+    change endianess given a string of hex words as input
+    """
+    s = split_hex_string(input)
+    b = ''
+    for hex_word in s:
+        b += bin(int(hex_word,16))[2:].zfill(16)
+    # flip the binary string
+    output = ''
+    for i in range(1, len(b)+1):
+        output += b[-i]
+    return output
+
+def split_hex_string(input_string:str) -> list:
+    """
+    Split a string of hex words into a list of words
+    """
+    hex_list = [input_string[i:i+4] for i in range(0, len(input_string), 4)]
+    return hex_list
+
+def crc16(data: bytes) -> int:
+    """
+    Calculate ISO/IEC 13239 CRC
+
+    Defined by:
+    initial CRC: 0xFFFF
+    reflect input: False
+    polynomial: 0x1021 (X^16+X^12+X^5+1)
+    reflect output: False
+    XOR output: 0xFFFF
+    """
+    # Define the polynomial (0x1021) used in CRC calculation
+    poly = 0x1021
+    # Initialize the CRC value to 0xFFFF
+    crc = 0xFFFF
+
+    # Iterate over each byte in the input data
+    for byte in data:
+        # Combine the current byte with the CRC register (XOR operation)
+        # Shift left by 8 bits to process the next byte
+        crc ^= byte << 8
+        # Process each bit in the byte
+        for _ in range(8):
+            # Check if the leftmost bit of the CRC is a 1
+            if (crc & 0x8000):
+                # If set, shift CRC left by 1 and XOR with the polynomial
+                crc = (crc << 1) ^ poly
+            else:
+                # If not set, shift the CRC left by 1
+                crc = crc << 1
+            
+            # mask with 0xFFFF to keep the crc value 16 bits
+            crc &= 0xFFFF
+
+    # XOR the final crc value with 0xFFFF
+    return crc ^ 0xFFFF
+
+# actual_crc = 0x98C3
+# input = '3000E280116060000211EBDD7175'
+# input_bytes = bytes.fromhex(input)
+# print(hex(crc16(input_bytes)))
+# print(hex(crc16_man(input_bytes)))
