@@ -3,9 +3,10 @@ from PyQt6.QtCore import *
 from PyQt6 import QtGui
 import sys
 import glob
-from matplotlib import pyplot as plt
+from sys import platform
 
 import serial
+from serial.tools.list_ports import comports
 import time
 from tools import *
 from reader import *
@@ -44,7 +45,8 @@ class Main(QWidget):
 
         
         # serial stuff
-        self.available_serial_devices = glob.glob('/dev/cu.*')
+        # get list of devices (works for all platforms)
+        self.available_serial_devices = list(map(lambda com_device: com_device.name, comports()))
         self.selected_device = None
         self.baudrate = 38400
         self.ser = None
@@ -75,7 +77,13 @@ class Main(QWidget):
         ######################################### First Row ############################
         # grid width
         width = 3
-        row = 0
+        # adjust first row offset to account for menu bar (different for different OS)
+        if platform == "win32":
+            # windows
+            row = 1
+        elif platform == "darwin":
+            # osx
+            row = 0
 
         # ############## label for select serial device ##############
         label = QLabel(self)
@@ -187,6 +195,7 @@ class Main(QWidget):
         print("logging started")
         # start logging
         try:
+            # if mac
             self.ser = serial.Serial(self.selected_device, self.baudrate, timeout=1)
             print("Serial interface opened")
             print("device: {}".format(self.selected_device))
@@ -352,7 +361,7 @@ class Main(QWidget):
 
     def refresh_serial_devices(self):
         # refresh the available serial devices
-        self.available_serial_devices = glob.glob('/dev/cu.*')
+        self.available_serial_devices = list(map(lambda com_device: com_device.name, comports()))
         # update dropdown options
         self.device_select_box.clear()
         self.device_select_box.addItems(self.available_serial_devices)

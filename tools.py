@@ -8,7 +8,6 @@
 import time
 import json
 from knownTags import *
-from crc import Calculator, Configuration
 
 
 # open json file containing mask designer ID and tag model number info
