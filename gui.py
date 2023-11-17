@@ -195,8 +195,10 @@ class Main(QWidget):
         print("logging started")
         # start logging
         try:
-            # if mac
-            self.ser = serial.Serial(self.selected_device, self.baudrate, timeout=1)
+            if platform == "darwin":
+                self.ser = serial.Serial("/dev/"+self.selected_device, self.baudrate, timeout=1)
+            else:
+                self.ser = serial.Serial(self.selected_device, self.baudrate, timeout=1)
             print("Serial interface opened")
             print("device: {}".format(self.selected_device))
             print("clearing input buffer")
