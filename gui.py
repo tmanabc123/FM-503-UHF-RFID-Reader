@@ -53,6 +53,7 @@ class Main(QWidget):
         self.reader = None
         self.unique_ids = []
         self.tag_database = {}
+        self.available_modes = ["TID","EPC","EPC-Multu"]
 
         # bool to keep track of whether or not a read function is in process
         # used to prevent overlap when spawning a new thread
@@ -81,6 +82,7 @@ class Main(QWidget):
         label.setFont(QtGui.QFont('Arial', 15)) 
         label.setText("Select Serial Device: ")
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        label.setFixedWidth(200)
         self.layout.addWidget(label, row,0)
 
         # ############## select device dropdown ##############
@@ -99,7 +101,33 @@ class Main(QWidget):
 
         ######################################### Second Row ############################
         row += 1
+        # ############## label for open File ##############
+        label = QLabel(self)
+        label.setFont(QtGui.QFont('Arial', 15)) 
+        label.setText("Select Input File: ")
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        label.setFixedWidth(200)
+        self.layout.addWidget(label, row,0)
+
+        
+
+        ######################################### Third Row ############################
+        row += 1
+        # ############## label for mode select ##############
+        label = QLabel(self)
+        label.setFont(QtGui.QFont('Arial', 15)) 
+        label.setText("Select Read Mode: ")
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        label.setFixedWidth(200)
+        self.layout.addWidget(label, row,0)
+
         # mode select between TID, EPC single, EPC multi, and multi segment
+        # ##############  Mode Selection ##############
+        self.read_mode_box = CustomComboBox()
+        self.read_mode_box.addItems(self.available_modes)
+        self.read_mode_box.activated.connect(self.update_selected_mode)
+        self.layout.addWidget(self.read_mode_box, row, 1)
+
 
         # open log file to read
 
@@ -147,15 +175,13 @@ class Main(QWidget):
     def create_toolbar(self):
         self.menubar = QMenuBar()
         self.layout.addWidget(self.menubar, 0, 0)
-        self.actionFile = self.menubar.addMenu("File")
-        self.actionFile.addAction("New")
-        self.actionFile.addAction("Open")
-        self.actionFile.addAction("Save")
-        self.actionFile.addSeparator()
-        self.actionFile.addAction("Quit")
-        self.menubar.addMenu("Edit")
-        self.menubar.addMenu("View")
-        self.menubar.addMenu("Help")
+        self.file_menu = self.menubar.addMenu("File")
+        self.file_menu.addAction("New")
+        self.file_menu.addAction("Open")
+        self.file_menu.addAction("Save")
+        self.file_menu.addSeparator()
+        self.file_submenu = self.file_menu.addMenu("Read Specific Tag")
+        self.file_submenu.addAction("Monza R6")
 
     def start_log(self):
         print("logging started")
@@ -336,6 +362,10 @@ class Main(QWidget):
         # log selected device
         self.selected_device = self.device_select_box.currentText()
         print("selected device: {}".format(self.selected_device))
+
+    def update_selected_mode(self):
+        self.selected_mode = self.read_mode_box.currentText()
+        print("Selected mode: {}".format(self.selected_mode))
 
 
 
