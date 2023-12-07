@@ -26,3 +26,6 @@ So far, the following functions have been implemented:
 4. Decode TID bank based on the EPS Gen2 standard
 5. Decode manufacturer ID and tag model number based on database provided by GS1
 6. Display decoded TID data in a gui
+7. Perform EPC bulk reads
+8. Basic EPC decoding (no database lookup for URIs. API access to GS1s database is very expensive)
+9. Adjust read rate
