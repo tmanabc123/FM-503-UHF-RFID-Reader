@@ -1,6 +1,8 @@
 # Overview
 This repo contains the python required to interface to the FM-503. This includes various modules that can be used in a command line setting as well as a GUI that can be used to display tag data and log to local or remote database. The GUI was developped for MAC os. It should work for windows too but looks pretty ugly.
 
+- Still adding features
+
 <img src="img/gui.png" alt="gui" width="65%"/>
 
 ## Dependencies
