@@ -4,6 +4,7 @@ This repo contains the python required to interface to the FM-503. This includes
 - Still adding features
 
 <img src="img/gui.png" alt="gui" width="65%"/>
+<img src="img/gui2.png" alt="gui" width="65%"/>
 
 ## Dependencies
 - PyQT6
@@ -29,3 +30,4 @@ So far, the following functions have been implemented:
 7. Perform EPC bulk reads
 8. Basic EPC decoding (no database lookup for URIs. API access to GS1s database is very expensive)
 9. Adjust read rate
+10. Adjust TX power level
