@@ -4,6 +4,7 @@ This repo contains the python required to interface to the FM-503. This includes
 - Still adding features
 
 <img src="img/gui.png" alt="gui" width="65%"/>
+<img src="img/gui2.png" alt="gui" width="65%"/>
 
 ## Dependencies
 - PyQT6
