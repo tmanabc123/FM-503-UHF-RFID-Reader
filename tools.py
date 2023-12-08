@@ -78,7 +78,7 @@ def segment_TID_data(binary_string_output:bool=False, input:str=False):
         epc_TD_standard_header = raw[32:48]
 
         decoded_segments_bin = [class_identifier, x, s, f, mdid, tmn, epc_TD_standard_header]
-        print("48-Bit TID: {}".format(decoded_segments_bin))
+        # print("48-Bit TID: {}".format(decoded_segments_bin))
         if binary_string_output:
             return decoded_segments_bin
         else:

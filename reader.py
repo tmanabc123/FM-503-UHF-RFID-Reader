@@ -73,11 +73,11 @@ class Reader():
 
     def convert_to_raw(self, input_int_list):
         """
-        converts MSB first int list to large raw binary blob 
+        converts MSB first int list to single binary string
 
         input_int_list: MSB first word list
 
-        return: binary string padded to 96 bits long (LSB in element 0)
+        return: binary string (each word padded to 16 bits) (LSB in element 0)
         """
         # convert to bin
         output_binary_string = ''
@@ -165,7 +165,8 @@ class Reader():
 
         raw: if true, the output will be the raw PC+EPC+CRC16 data
         
-        crc: if true, the crc will be checked before returning the EPC data split into words
+        crc: if true, the crc will be checked before returning the EPC data split into words.
+            the calculated and read crc will be returned along with the data 
 
         Note: For some reason, the reader outputs the data differently compared to single EPC read.
             Here, the output format is PC+EPC+CRC16
@@ -201,9 +202,9 @@ class Reader():
                     # re-format data from PC+EPC+CRC16 to CRC16+PC+EPC
                     formatted = string_form[-9:-5]+string_form[3:-9] 
                     if raw:
-                        data.append(formatted)
+                        data.append([formatted, crc_from_tag, crc_calculated])
                     else:
-                        data.append(self.hex_str_to_int_list(formatted))
+                        data.append([self.hex_str_to_int_list(formatted), crc_from_tag, crc_calculated])
                 # if crc is bad
                 else:
                     print("CRC bad")
@@ -215,6 +216,8 @@ class Reader():
                     data.append(formatted)
                 else:
                     data.append(self.hex_str_to_int_list(formatted))
+        # return Fasle if no tags were read
+        if len(data) == 0: return False
         return data
 
 
