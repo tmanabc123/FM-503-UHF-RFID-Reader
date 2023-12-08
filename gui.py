@@ -103,6 +103,8 @@ class Main(QWidget):
         elif platform == "darwin":
             # osx
             row = 0
+        elif platform == "linux":
+            row = 1
 
         # ############## label for select serial device ##############
         label = QLabel(self)
@@ -237,8 +239,11 @@ class Main(QWidget):
         try:
             if platform == "darwin":
                 self.ser = serial.Serial("/dev/"+self.selected_device, self.baudrate, timeout=1)
+            elif platform == "linux":
+                self.ser = serial.Serial("/dev/"+self.selected_device, self.baudrate, timeout=1)
             else:
                 self.ser = serial.Serial(self.selected_device, self.baudrate, timeout=1)
+                
             print("Serial interface opened")
             print("device: {}".format(self.selected_device))
             print("clearing input buffer")
