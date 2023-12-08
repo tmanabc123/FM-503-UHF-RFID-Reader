@@ -25,7 +25,7 @@ class CustomComboBox(QComboBox):
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        self.debug = False
+        self.debug = True
         self.setWindowTitle('RFID Reader')
         self.setGeometry(100, 100, 950, 500)
         # create grid layout
@@ -36,6 +36,13 @@ class Main(QWidget):
         # timer stuff
         self.available_update_rates = ["10", "25", "50", "100", "200", "300", "400", "500", "750", "1000", "1500", "2000"]
         self.update_rate = 10
+
+        # Transmit power level stuff
+        self.available_power_levels = []
+        for i in range(0, 0x1C):
+            self.available_power_levels.append("{}dB".format(i-2))
+        self.selected_tx_power_level = -2
+        self.pwr_lvl_change = True
 
         # Data table stuff
         # TID
@@ -88,7 +95,7 @@ class Main(QWidget):
     def initUI(self):
         ######################################### First Row ############################
         # grid width
-        width = 5
+        width = 4
         # adjust first row offset to account for menu bar (different for different OS)
         if platform == "win32":
             # windows
@@ -100,8 +107,8 @@ class Main(QWidget):
         # ############## label for select serial device ##############
         label = QLabel(self)
         label.setFont(QtGui.QFont('Arial', 15)) 
-        label.setText("Select Serial Device: ")
-        label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        label.setText("Select Serial Device:")
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         label.setFixedWidth(150)
         self.layout.addWidget(label, row,0)
 
@@ -116,8 +123,8 @@ class Main(QWidget):
         # ############## label for mode select ##############
         label = QLabel(self)
         label.setFont(QtGui.QFont('Arial', 15)) 
-        label.setText("Select Read Mode: ")
-        label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        label.setText("Select Read Mode:")
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         label.setFixedWidth(150)
         self.layout.addWidget(label, row,2)
 
@@ -129,16 +136,45 @@ class Main(QWidget):
         self.read_mode_box.setFixedWidth(150)
         self.layout.addWidget(self.read_mode_box, row, 3)
 
-        # ############## button to start logging ##############
-        self.start_logging_button = QPushButton(self, text='Start Logging')
-        self.start_logging_button.setStyleSheet(green_button_style_shet)
-        self.start_logging_button.clicked.connect(self.start_log)
-        self.layout.addWidget(self.start_logging_button,row,4)
 
 
 
+        ######################################### Second Row ############################
+        row += 1
+        # ############## label for output power select ##############
+        label = QLabel(self)
+        label.setFont(QtGui.QFont('Arial', 15)) 
+        label.setText("TX Power:")
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        label.setFixedWidth(150)
+        self.layout.addWidget(label, row,0)
 
-        ######################################### Data Display block ############################
+        # mode select between TID, EPC single, EPC multi, and multi segment
+        # ##############  Mode Selection ##############
+        self.tx_power_box = CustomComboBox()
+        self.tx_power_box.addItems(self.available_power_levels)
+        self.tx_power_box.activated.connect(self.update_tx_power_level)
+        self.tx_power_box.setFixedWidth(220)
+        self.layout.addWidget(self.tx_power_box, row, 1)
+
+        # ############## label for mode select ##############
+        label = QLabel(self)
+        label.setFont(QtGui.QFont('Arial', 15)) 
+        label.setText("Read Rate (ms):")
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        label.setFixedWidth(150)
+        self.layout.addWidget(label, row,2)
+
+        # mode select between TID, EPC single, EPC multi, and multi segment
+        # ##############  Mode Selection ##############
+        self.update_rate_box = CustomComboBox()
+        self.update_rate_box.addItems(self.available_update_rates)
+        self.update_rate_box.activated.connect(self.update_read_rate)
+        self.update_rate_box.setFixedWidth(150)
+        self.layout.addWidget(self.update_rate_box, row, 3)
+
+
+        ######################################### Third Row ############################
         # ############## section label ##############
         row += 1
         section_one_label = QLabel(self)
@@ -159,21 +195,13 @@ class Main(QWidget):
         self.reset_log_button.clicked.connect(self.clear_log)
         self.layout.addWidget(self.reset_log_button,row,2)
 
-        # ############## label for mode select ##############
-        label = QLabel(self)
-        label.setFont(QtGui.QFont('Arial', 15)) 
-        label.setText("Read Rate:")
-        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        label.setFixedWidth(100)
-        self.layout.addWidget(label, row,3)
 
-        # mode select between TID, EPC single, EPC multi, and multi segment
-        # ##############  Mode Selection ##############
-        self.update_rate_box = CustomComboBox()
-        self.update_rate_box.addItems(self.available_update_rates)
-        self.update_rate_box.activated.connect(self.update_read_rate)
-        self.update_rate_box.setFixedWidth(80)
-        self.layout.addWidget(self.update_rate_box, row, 4)
+
+        # ############## button to start logging ##############
+        self.start_logging_button = QPushButton(self, text='Start Logging')
+        self.start_logging_button.setStyleSheet(green_button_style_shet)
+        self.start_logging_button.clicked.connect(self.start_log)
+        self.layout.addWidget(self.start_logging_button,row,3)
 
 
         # ############## data table ##############
@@ -242,6 +270,16 @@ class Main(QWidget):
         """
         Read data from the reader every N seconds and then update the data
         """
+        ############ Update Reader Settings If There Are Changes ##########
+        # update tx power level
+        if self.pwr_lvl_change:
+            if self.debug: print("updating power level")
+            success = self.reader.set_tx_power_level(self.selected_tx_power_level)
+            self.pwr_lvl_change = False
+            time.sleep(0.5) # this sleep is required. won't work othrwise
+            if self.debug: print("succes: {}".format(success))
+
+
         ############### if TID ###############
         # collect new data
         if self.selected_mode == "TID":
@@ -477,10 +515,16 @@ class Main(QWidget):
         self.clear_log()
 
     def update_read_rate(self):
-        #update rad rate interval
+        # update read rate interval
         self.update_rate = int(self.update_rate_box.currentText())
         self.timer.setInterval(self.update_rate)
-        print("Read Rate: {}".format(self.update_rate))
+        print("Read Rate (ms): {}".format(self.update_rate))
+
+    def update_tx_power_level(self):
+        # update transmit power levels 
+        self.selected_tx_power_level = int(self.tx_power_box.currentText().replace("dB", ""))
+        print("Changing TX power level to {}dB".format(self.selected_tx_power_level))
+        self.pwr_lvl_change = True
 
 
 

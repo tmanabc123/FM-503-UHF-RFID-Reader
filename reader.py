@@ -270,3 +270,24 @@ class Reader():
 
         # XOR the final crc value with 0xFFFF
         return crc ^ 0xFFFF
+    
+    def set_tx_power_level(self, pwr_level:int) -> bool:
+        """
+        Set the transmit power level
+        """
+        # convert hex int power level to proper hex value and send
+        hex_power_level = hex(pwr_level+2)[2:].zfill(2).upper()
+        to_write = "\nN1,{}\r".format(hex_power_level).encode('utf-8')
+        self.ser.write(to_write)
+        # wait for \n response
+        while self.ser.readline() != b'\n':
+                time.sleep(0.0001)
+        # # make sure power is set properly
+        ticks = 0
+        while self.ser.readline().decode("utf-8")[1:3] != hex_power_level:
+            time.sleep(0.001) # sleep 1ms
+            timeout += 1
+            if ticks == 500:
+                # return false if time out
+                return False
+        return True
