@@ -30,6 +30,12 @@ class Main(QWidget):
         self.setGeometry(100, 100, 950, 500)
         # create grid layout
         self.layout = QGridLayout()
+        # self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setColumnStretch(0, 1)
+        self.layout.setColumnStretch(1, 1)
+        self.layout.setColumnStretch(2, 1)
+        self.layout.setColumnStretch(3, 1)
+
         # set layout on window
         self.setLayout(self.layout)
 
@@ -109,7 +115,7 @@ class Main(QWidget):
         label.setFont(QtGui.QFont('Arial', 15)) 
         label.setText("Select Serial Device:")
         label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        label.setFixedWidth(150)
+        label.setMinimumWidth(150)
         self.layout.addWidget(label, row,0)
 
         # ############## select device dropdown ##############
@@ -117,7 +123,7 @@ class Main(QWidget):
         self.device_select_box.addItems(self.available_serial_devices)
         self.device_select_box.activated.connect(self.update_selected_serial_device)
         self.device_select_box.clicked.connect(self.refresh_serial_devices)
-        self.device_select_box.setFixedWidth(220)
+        self.device_select_box.setMinimumWidth(220)
         self.layout.addWidget(self.device_select_box, row, 1)
 
         # ############## label for mode select ##############
@@ -125,7 +131,7 @@ class Main(QWidget):
         label.setFont(QtGui.QFont('Arial', 15)) 
         label.setText("Select Read Mode:")
         label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        label.setFixedWidth(150)
+        label.setMinimumWidth(150)
         self.layout.addWidget(label, row,2)
 
         # mode select between TID, EPC single, EPC multi, and multi segment
@@ -133,7 +139,7 @@ class Main(QWidget):
         self.read_mode_box = CustomComboBox()
         self.read_mode_box.addItems(self.available_modes)
         self.read_mode_box.activated.connect(self.update_selected_mode)
-        self.read_mode_box.setFixedWidth(150)
+        self.read_mode_box.setMinimumWidth(150)
         self.layout.addWidget(self.read_mode_box, row, 3)
 
 
@@ -146,7 +152,7 @@ class Main(QWidget):
         label.setFont(QtGui.QFont('Arial', 15)) 
         label.setText("TX Power:")
         label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        label.setFixedWidth(150)
+        label.setMinimumWidth(150)
         self.layout.addWidget(label, row,0)
 
         # mode select between TID, EPC single, EPC multi, and multi segment
@@ -154,7 +160,7 @@ class Main(QWidget):
         self.tx_power_box = CustomComboBox()
         self.tx_power_box.addItems(self.available_power_levels)
         self.tx_power_box.activated.connect(self.update_tx_power_level)
-        self.tx_power_box.setFixedWidth(220)
+        self.tx_power_box.setMinimumWidth(220)
         self.layout.addWidget(self.tx_power_box, row, 1)
 
         # ############## label for mode select ##############
@@ -162,7 +168,7 @@ class Main(QWidget):
         label.setFont(QtGui.QFont('Arial', 15)) 
         label.setText("Read Rate (ms):")
         label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        label.setFixedWidth(150)
+        label.setMinimumWidth(150)
         self.layout.addWidget(label, row,2)
 
         # mode select between TID, EPC single, EPC multi, and multi segment
@@ -170,7 +176,7 @@ class Main(QWidget):
         self.update_rate_box = CustomComboBox()
         self.update_rate_box.addItems(self.available_update_rates)
         self.update_rate_box.activated.connect(self.update_read_rate)
-        self.update_rate_box.setFixedWidth(150)
+        self.update_rate_box.setMinimumWidth(150)
         self.layout.addWidget(self.update_rate_box, row, 3)
 
 
