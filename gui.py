@@ -30,11 +30,6 @@ class Main(QWidget):
         self.setGeometry(100, 100, 950, 500)
         # create grid layout
         self.layout = QGridLayout()
-        # self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setColumnStretch(0, 1)
-        self.layout.setColumnStretch(1, 1)
-        self.layout.setColumnStretch(2, 1)
-        self.layout.setColumnStretch(3, 1)
 
         # set layout on window
         self.setLayout(self.layout)
