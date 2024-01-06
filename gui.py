@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6 import QtGui
 import sys
-import glob
 from sys import platform
+from writeWindow import *
 
 import serial
 from serial.tools.list_ports import comports
@@ -158,6 +158,7 @@ class Main(QWidget):
         self.tx_power_box.addItems(self.available_power_levels)
         self.tx_power_box.activated.connect(self.update_tx_power_level)
         self.tx_power_box.setMinimumWidth(220)
+        self.tx_power_box.setCurrentIndex(27) # set default value
         self.layout.addWidget(self.tx_power_box, row, 1)
 
         # ############## label for mode select ##############
@@ -174,6 +175,7 @@ class Main(QWidget):
         self.update_rate_box.addItems(self.available_update_rates)
         self.update_rate_box.activated.connect(self.update_read_rate)
         self.update_rate_box.setMinimumWidth(150)
+        self.update_rate_box.setCurrentIndex(3) # set default value
         self.layout.addWidget(self.update_rate_box, row, 3)
 
 
@@ -226,13 +228,32 @@ class Main(QWidget):
     def create_toolbar(self):
         self.menubar = QMenuBar()
         self.layout.addWidget(self.menubar, 0, 0)
+
+        # Create File menu
         self.file_menu = self.menubar.addMenu("File")
-        self.file_menu.addAction("New")
-        self.file_menu.addAction("Open")
-        self.file_menu.addAction("Save")
+
+        # Add menu actions
+        open_action = QtGui.QAction("Open", self)
+        save_action = QtGui.QAction("Save", self)
+
+        self.file_menu.addAction(open_action)
+        self.file_menu.addAction(save_action)
         self.file_menu.addSeparator()
-        self.file_submenu = self.file_menu.addMenu("Read Specific Tag")
-        self.file_submenu.addAction("Monza R6")
+
+        self.file_read_submenu = self.file_menu.addMenu("Read Specific Tag")
+        monza_r6_read_action = QtGui.QAction("Monza R6", self)
+        self.file_read_submenu.addAction(monza_r6_read_action)
+        self.file_menu.addSeparator()
+
+
+        self.file_write_submenu = self.file_menu.addMenu("Write")
+        write_action = QtGui.QAction("Write", self)
+        self.file_write_submenu.addAction(write_action)
+
+        # connect actions to functions
+        write_action.triggered.connect(self.openWriteWindow)
+
+
 
     def start_log(self):
         print("logging started")
@@ -266,6 +287,7 @@ class Main(QWidget):
 
         # instantiate reader object
         self.reader = Reader(self.ser)
+        self.reading = True
 
         # start data collection
         # Start timer to call update_label every Nms
@@ -346,6 +368,7 @@ class Main(QWidget):
 
     def stop_log(self):
         print("logging stopped")
+        self.reading = False
         # stop timer
         self.timer.stop()
         # change button to start configuration
@@ -531,6 +554,15 @@ class Main(QWidget):
         self.selected_tx_power_level = int(self.tx_power_box.currentText().replace("dB", ""))
         print("Changing TX power level to {}dB".format(self.selected_tx_power_level))
         self.pwr_lvl_change = True
+
+    def openWriteWindow(self):
+        # stop logging if needed
+        if self.reading:
+            self.stop_log()
+        # Create an instance of the writer window
+        self.read_window = writeWindow()
+        self.read_window.show()
+
 
 
 
