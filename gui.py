@@ -8,8 +8,10 @@ from writeWindow import *
 import serial
 from serial.tools.list_ports import comports
 import time
+import csv
 from tools import *
 from reader import *
+
 
 
 class CustomComboBox(QComboBox):
@@ -74,7 +76,7 @@ class Main(QWidget):
         self.tag_database = {}
         # note: tag_database format for TID mode: {"bin_string":read_count}
         #       for EPC-multi mode: {"bin_string":[read_count, read_crc, calculated_crc]}
-        self.available_modes = ["TID","EPC","EPC-multi"]
+        self.available_modes = ["TID","EPC-multi"]
         self.selected_mode = "TID"
 
         # bool to keep track of whether or not a read function is in process
@@ -304,8 +306,9 @@ class Main(QWidget):
             if self.debug: print("updating power level")
             success = self.reader.set_tx_power_level(self.selected_tx_power_level)
             self.pwr_lvl_change = False
-            time.sleep(0.5) # this sleep is required. won't work othrwise
+            time.sleep(1) # this sleep is required. won't work othrwise
             if self.debug: print("succes: {}".format(success))
+            print("Power level set to: {}".format(self.selected_tx_power_level))
 
 
         ############### if TID ###############
@@ -393,7 +396,25 @@ class Main(QWidget):
         """
         Save log to file
         """
-        print("Saving Log to file")
+        print("Opening file save dialog")
+        file_name, _ = QFileDialog.getSaveFileName(self, "Save File", "/Users/taylor/Desktop", ".csv")
+        if file_name:
+            file_name += ".csv"
+            print("saving tag data to {}".format(file_name))
+        try:
+            with open(file_name, "x", newline="") as file:
+                writer = csv.writer(file)
+                # write the header
+                if self.selected_mode == "TID":
+                    writer.writerow("TID_DATA")
+                print("file saved")
+                for element in self.tag_database:
+                    writer.writerow(element)
+                file.close()
+                print("file closed")
+        except Exception as error:
+            print('file save failed')
+            print("Error: {}".format(error))
 
 
     def update_data_table(self):
